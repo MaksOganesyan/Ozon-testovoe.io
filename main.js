@@ -61,6 +61,7 @@ valueInput.addEventListener('input', function() {
   progress.setValue(this.value);
 });
 
+
 valueInput.addEventListener('blur', function() {
   const num = clamp(this.value);
   this.value = num;

@@ -1,4 +1,3 @@
-const DEG_PER_PERCENT = 3.6;
 const MIN = 0;
 const MAX = 100;
 
@@ -15,8 +14,7 @@ function ProgressBlock(indicator) {
   let hidden = false;
 
   function update() {
-    const deg = value * DEG_PER_PERCENT;
-    indicator.style.setProperty('--deg', deg + 'deg');
+    indicator.style.setProperty('--progress', value);  // передаём 0..100
     indicator.setAttribute('aria-valuenow', value);
     indicator.style.visibility = hidden ? 'hidden' : 'visible';
 
@@ -60,7 +58,6 @@ progress.setValue(75);
 valueInput.addEventListener('input', function() {
   progress.setValue(this.value);
 });
-
 
 valueInput.addEventListener('blur', function() {
   const num = clamp(this.value);

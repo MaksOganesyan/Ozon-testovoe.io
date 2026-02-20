@@ -2,35 +2,74 @@ const DEG_PER_PERCENT = 3.6;
 const MIN = 0;
 const MAX = 100;
 
-const indicator = document.querySelector('.indicator');
-const valueInput = document.getElementById('value');
-const animateCheckbox = document.getElementById('animate');
-const hideCheckbox = document.getElementById('hide');
+function clamp(value) {
+  const num = Number(value) || 0;
+  if (num < MIN) return MIN;
+  if (num > MAX) return MAX;
+  return num;
+}
+
+function ProgressBlock(indicator) {
+  let value = 0;
+  let animated = false;
+  let hidden = false;
+
+  function update() {
+    const deg = value * DEG_PER_PERCENT;
+    indicator.style.background = 'conic-gradient(#005bff ' + deg + 'deg, #eff3f6 ' + deg + 'deg)';
+    indicator.setAttribute('aria-valuenow', value);
+    indicator.style.visibility = hidden ? 'hidden' : 'visible';
+    if (animated) {
+      indicator.classList.add('rotate');
+    } else {
+      indicator.classList.remove('rotate');
+    }
+  }
+
+  return {
+    setValue: function(v) {
+      value = clamp(v);
+      update();
+    },
+    setAnimated: function(on) {
+      animated = on;
+      update();
+    },
+    setHidden: function(on) {
+      hidden = on;
+      update();
+    },
+    getState: function() {
+      return { value: value, animated: animated, hidden: hidden };
+    }
+  };
+}
+
+var indicator = document.querySelector('.indicator');
+var progress = ProgressBlock(indicator);
+window.ProgressAPI = progress;
+
+var valueInput = document.getElementById('value');
+var animateCheckbox = document.getElementById('animate');
+var hideCheckbox = document.getElementById('hide');
 
 valueInput.value = 75;
+progress.setValue(75);
 
-function setProgress(value) {
-  const num = Math.min(MAX, Math.max(MIN, Number(value) || 0));
-  const deg = num * DEG_PER_PERCENT;
-  indicator.style.background = `conic-gradient(#005bff ${deg}deg, #eff3f6 ${deg}deg)`;
-  indicator.setAttribute('aria-valuenow', num);
-}
+valueInput.addEventListener('input', function() {
+  progress.setValue(valueInput.value);
+});
 
-function syncInput() {
-  const num = Math.min(MAX, Math.max(MIN, Number(valueInput.value) || 0));
+valueInput.addEventListener('blur', function() {
+  var num = clamp(valueInput.value);
   valueInput.value = num;
-  setProgress(num);
-}
-
-valueInput.addEventListener('input', () => setProgress(valueInput.value));
-valueInput.addEventListener('blur', syncInput);
-
-animateCheckbox.addEventListener('change', () => {
-  indicator.classList.toggle('rotate', animateCheckbox.checked);
+  progress.setValue(num);
 });
 
-hideCheckbox.addEventListener('change', () => {
-  indicator.style.visibility = hideCheckbox.checked ? 'hidden' : 'visible';
+animateCheckbox.addEventListener('change', function() {
+  progress.setAnimated(animateCheckbox.checked);
 });
 
-setProgress(75);
+hideCheckbox.addEventListener('change', function() {
+  progress.setHidden(hideCheckbox.checked);
+});

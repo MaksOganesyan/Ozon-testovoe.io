@@ -1,146 +1,80 @@
-:root {
-  --progress-fill: #005bff;
-  --progress-track: #eff3f6;
-  --switch-active: #005bff;
-  --switch-inactive: #dfe6f0;
-  --transition-duration: 0.2s;
-  --transition-timing: linear;
-}
-
-*,
-*::before,
-*::after {
-  padding: 0;
+* {
   margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
 body {
-  font-family: 'GT Eesti Pro Display', 'Poppins', 'Segoe UI', Tahoma, Geneva,
-    Verdana, sans-serif;
-  font-weight: 600;
+  font-family: Poppins, sans-serif;
   font-size: 14px;
-  line-height: 28px;
+  font-weight: 500;
+  background: #f0f2f5;
+  min-height: 100vh;
 }
 
 .container {
-  padding: 1.3rem;
+  padding: 20px;
+  min-height: 100vh;
 }
 
 .title {
-  position: absolute;
-  margin-top: -2px;
-  margin-left: -1px;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
 }
 
 .progress {
   display: grid;
-  width: 100%;
-  height: calc(100vh - 2.6rem);
   align-items: center;
-  place-items: center;
+  justify-items: center;
+  gap: 30px;
+  padding: 20px 0;
+  min-height: calc(100vh - 80px);
 }
 
 .indicator {
-  margin-top: 45px;
-  height: 7.5rem;
-  width: 7.5rem;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   position: relative;
-  display: grid;
-  place-items: center;
-  transition: background var(--transition-duration) var(--transition-timing),
-    visibility var(--transition-duration) var(--transition-timing);
 }
 
 .indicator::before {
   content: '';
   position: absolute;
+  top: 10%;
+  left: 10%;
+  right: 10%;
+  bottom: 10%;
   border-radius: 50%;
-  height: 84%;
-  width: 84%;
-  background-color: #fff;
-  transition: transform var(--transition-duration) var(--transition-timing);
+  background: #fff;
 }
 
 .settings {
-  display: grid;
-  gap: 12px;
-  margin-bottom: 65px;
-  margin-right: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.parameter {
-  display: grid;
-  gap: 22px;
-  grid-template-columns: 44px auto;
-}
-
-.parameter > label[for] {
+.param {
   display: flex;
   align-items: center;
+  gap: 16px;
 }
 
-.switch {
-  position: relative;
-  cursor: pointer;
-}
-
-.switch__input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.switch__input:focus-visible + .slider {
-  outline: 2px solid var(--switch-active);
-  outline-offset: 2px;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 1rem;
-  background-color: var(--switch-inactive);
-  transition: background-color 0.3s;
-}
-
-.slider::before {
-  position: absolute;
-  content: '';
-  height: 24px;
-  width: 24px;
-  left: 2px;
-  bottom: 2px;
-  border-radius: 50%;
-  background-color: #fff;
-  transition: transform 0.3s;
-}
-
-.switch__input:checked + .slider::before {
-  transform: translateX(16px);
-}
-
-.switch__input:checked + .slider {
-  background-color: var(--switch-active);
-}
-
-#value {
+.param input[type="number"] {
+  width: 56px;
+  height: 36px;
+  font-size: 14px;
   font-weight: 600;
-  border-radius: 1em;
-  border: solid 0.1rem;
   text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
   outline: none;
-  height: 40px;
 }
 
-#value:focus-visible {
-  outline: 2px solid var(--progress-fill);
-  outline-offset: 2px;
+.param input[type="number"]:focus {
+  border-color: #005bff;
 }
 
 input::-webkit-outer-spin-button,
@@ -149,9 +83,54 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-input[type='number'] {
+input[type="number"] {
   -moz-appearance: textfield;
   appearance: textfield;
+}
+
+.switch {
+  position: relative;
+  display: block;
+  width: 44px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.switch-input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 24px;
+  background: #ddd;
+  transition: 0.2s;
+}
+
+.switch-slider::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  bottom: 3px;
+  border-radius: 50%;
+  background: #fff;
+  transition: 0.2s;
+}
+
+.switch-input:checked + .switch-slider {
+  background: #005bff;
+}
+
+.switch-input:checked + .switch-slider::before {
+  transform: translateX(20px);
 }
 
 @keyframes rotate360 {
@@ -164,23 +143,14 @@ input[type='number'] {
   animation: 2s rotate360 infinite linear;
 }
 
-@media screen and (orientation: portrait) {
+@media (orientation: portrait) {
   .progress {
     grid-template-rows: 47% 53%;
   }
 }
 
-@media screen and (orientation: landscape) {
+@media (orientation: landscape) {
   .progress {
     grid-template-columns: 47% 53%;
-  }
-  .indicator {
-    margin-bottom: 19%;
-    margin-left: 49px;
-  }
-
-  .settings {
-    margin-bottom: 2px;
-    margin-right: 58px;
   }
 }

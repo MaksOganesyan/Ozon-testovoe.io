@@ -16,9 +16,10 @@ function ProgressBlock(indicator) {
 
   function update() {
     const deg = value * DEG_PER_PERCENT;
-    indicator.style.background = 'conic-gradient(#005bff ' + deg + 'deg, #eff3f6 ' + deg + 'deg)';
+    indicator.style.setProperty('--deg', deg + 'deg');
     indicator.setAttribute('aria-valuenow', value);
     indicator.style.visibility = hidden ? 'hidden' : 'visible';
+
     if (animated) {
       indicator.classList.add('rotate');
     } else {
@@ -40,36 +41,36 @@ function ProgressBlock(indicator) {
       update();
     },
     getState: function() {
-      return { value: value, animated: animated, hidden: hidden };
+      return { value, animated, hidden };
     }
   };
 }
 
-var indicator = document.querySelector('.indicator');
-var progress = ProgressBlock(indicator);
+const indicator = document.querySelector('.indicator');
+const progress = ProgressBlock(indicator);
 window.ProgressAPI = progress;
 
-var valueInput = document.getElementById('value');
-var animateCheckbox = document.getElementById('animate');
-var hideCheckbox = document.getElementById('hide');
+const valueInput = document.getElementById('value');
+const animateCheckbox = document.getElementById('animate');
+const hideCheckbox = document.getElementById('hide');
 
 valueInput.value = 75;
 progress.setValue(75);
 
 valueInput.addEventListener('input', function() {
-  progress.setValue(valueInput.value);
+  progress.setValue(this.value);
 });
 
 valueInput.addEventListener('blur', function() {
-  var num = clamp(valueInput.value);
-  valueInput.value = num;
+  const num = clamp(this.value);
+  this.value = num;
   progress.setValue(num);
 });
 
 animateCheckbox.addEventListener('change', function() {
-  progress.setAnimated(animateCheckbox.checked);
+  progress.setAnimated(this.checked);
 });
 
 hideCheckbox.addEventListener('change', function() {
-  progress.setHidden(hideCheckbox.checked);
+  progress.setHidden(this.checked);
 });

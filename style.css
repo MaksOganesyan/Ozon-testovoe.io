@@ -37,6 +37,13 @@ body {
   height: 120px;
   border-radius: 50%;
   position: relative;
+  background: conic-gradient(
+    from -90deg at 50% 50%,
+    #005bff 0deg,
+    #005bff var(--deg, 0deg),
+    #eff3f6 var(--deg, 0deg)
+  );
+  transition: background 0.3s ease; /* плавное заполнение */
 }
 
 .indicator::before {

@@ -14,7 +14,7 @@ function ProgressBlock(indicator) {
   let hidden = false;
 
   function update() {
-    indicator.style.setProperty('--progress', value);  // передаём 0..100
+    indicator.style.setProperty('--progress', value);
     indicator.setAttribute('aria-valuenow', value);
     indicator.style.visibility = hidden ? 'hidden' : 'visible';
 

@@ -37,7 +37,7 @@ body {
   height: 120px;
   border-radius: 50%;
   position: relative;
-  --progress: 0;   /* значение от 0 до 100 */
+  --progress: 0;
   background: conic-gradient(
     from -90deg at 50% 50%,
     #005bff 0deg,
